@@ -121,24 +121,6 @@ runs:
         $env.PR_NUMBER_INPUT = $pr
         $env.COMMENT_BODY_INPUT = $commentBody
 
-        let parsed_url = try { $base_url | url parse } catch { null }
-        if ($parsed_url | is-not-empty) and ($parsed_url.host? | default '') == 'api.deepseek.com' {
-          let token = $env.CHAT_TOKEN_INPUT
-          let balance_url = 'https://api.deepseek.com/user/balance'
-          let headers = { Authorization: $'Bearer ($token)' }
-          let response = try {
-            http get -H $headers $balance_url
-          } catch {
-            print $'Error fetching balance'
-            exit 1
-          }
-          let is_available = $response | get is_available?
-          if not $is_available {
-            print 'Error: DeepSeek API balance is not available.'
-            exit 1
-          }
-        }
-
         # Let the child Nu parser receive the runtime container-side action path before `use`.
         ^nu -I ($env.GITHUB_ACTION_PATH | path join nu) -c "
           use review.nu *
