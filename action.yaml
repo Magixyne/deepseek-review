@@ -120,18 +120,20 @@ runs:
         $env.PR_NUMBER_INPUT = $pr
         $env.COMMENT_BODY_INPUT = $commentBody
 
-        if ($env.BASE_URL_INPUT | str starts-with 'https://api.deepseek.com') {
+        let parsed_url = try { $base_url | url parse } catch { null }
+        if ($parsed_url | is-not-empty) and ($parsed_url.host? | default '') == 'api.deepseek.com' {
           let token = $env.CHAT_TOKEN_INPUT
           if ($token | is-empty) {
             print 'Error: CHAT_TOKEN_INPUT is required for balance check.'
             exit 1
           }
           let balance_url = 'https://api.deepseek.com/user/balance'
-          let headers = [['Authorization', $'Bearer ($token)']]
+          let headers = { Authorization: $'Bearer ($token)' }
           let response = try {
             http get -H $headers $balance_url
           } catch {
-            print $'Error fetching balance: ($error)'
+            let err_msg = $error.msg? | default 'Unknown HTTP error'
+            print $'Error fetching balance: ($err_msg)'
             exit 1
           }
           let is_available = $response | get is_available? | default false
