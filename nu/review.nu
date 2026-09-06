@@ -180,6 +180,21 @@ export def --env deepseek-review [
     exit $ECODE.SUCCESS
   }
 
+  let parsed_url = try { $base_url | url parse } catch { null }
+  if ($parsed_url | is-not-empty) and ($parsed_url.host? | default '') == 'api.deepseek.com' {
+    let response = try {
+      http get -H CHAT_HEADER 'https://api.deepseek.com/user/balance'
+    } catch {
+      print 'Error fetching deepseek balance'
+      exit $ECODE.SERVER_ERROR
+    }
+    let is_available = $response | get is_available? | default false
+    if not $is_available {
+      print 'Error: DeepSeek API balance is not available.'
+      exit $ECODE.CONDITION_NOT_SATISFIED
+    }
+  }
+
   validate-token $token --pr-number $pr_number --repo $repo
   let hint = if not $is_action and ($pr_number | is-empty) {
     $'🚀 Initiate the code review by DeepSeek AI for local changes ...'
