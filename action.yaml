@@ -120,7 +120,6 @@ runs:
         }
         $env.PR_NUMBER_INPUT = $pr
         $env.COMMENT_BODY_INPUT = $commentBody
-
         # Let the child Nu parser receive the runtime container-side action path before `use`.
         ^nu -I ($env.GITHUB_ACTION_PATH | path join nu) -c "
           use review.nu *
