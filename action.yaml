@@ -139,7 +139,6 @@ runs:
             print 'Error: DeepSeek API balance is not available (is_available=false).'
             exit 1
           }
-          print 'Balance check passed.'
         }
 
         # Let the child Nu parser receive the runtime container-side action path before `use`.
