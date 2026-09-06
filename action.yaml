@@ -123,10 +123,6 @@ runs:
         let parsed_url = try { $base_url | url parse } catch { null }
         if ($parsed_url | is-not-empty) and ($parsed_url.host? | default '') == 'api.deepseek.com' {
           let token = $env.CHAT_TOKEN_INPUT
-          if ($token | is-empty) {
-            print 'Error: CHAT_TOKEN_INPUT is required for balance check.'
-            exit 1
-          }
           let balance_url = 'https://api.deepseek.com/user/balance'
           let headers = { Authorization: $'Bearer ($token)' }
           let response = try {
