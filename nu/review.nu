@@ -202,7 +202,7 @@ export def --env deepseek-review [
     exit $ECODE.SUCCESS
   }
 
-  let parsed_url = try { $base_url | url parse } catch { null }
+  let parsed_url = try { $url | url parse } catch { null }
   if ($parsed_url | is-not-empty) and ($parsed_url.host? | default '') == 'api.deepseek.com' {
     let response = try {
       http get -H CHAT_HEADER 'https://api.deepseek.com/user/balance'
