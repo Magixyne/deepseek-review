@@ -136,7 +136,7 @@ runs:
             print $'Error fetching balance: ($err_msg)'
             exit 1
           }
-          let is_available = $response | get is_available? | default false
+          let is_available = $response | get is_available?
           if not $is_available {
             print 'Error: DeepSeek API balance is not available (is_available=false).'
             exit 1
