@@ -68,6 +68,7 @@ runs:
       uses: hustcer/setup-nu@v3.27
       with:
         version: 0.115.1
+
     - name: DeepSeek Code Review
       shell: nu {0}
       env:
@@ -128,13 +129,12 @@ runs:
           let response = try {
             http get -H $headers $balance_url
           } catch {
-            let err_msg = $error.msg? | default 'Unknown HTTP error'
-            print $'Error fetching balance: ($err_msg)'
+            print $'Error fetching balance'
             exit 1
           }
           let is_available = $response | get is_available?
           if not $is_available {
-            print 'Error: DeepSeek API balance is not available (is_available=false).'
+            print 'Error: DeepSeek API balance is not available.'
             exit 1
           }
         }
