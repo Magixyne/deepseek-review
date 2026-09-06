@@ -64,7 +64,12 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: 'DeepSeek Code Review'
+    - name: Setup Nu
+      uses: hustcer/setup-nu@v3.27
+      with:
+        version: 0.115.1
+        
+    - name: DeepSeek Code Review
       shell: nu {0}
       env:
         WATCH_MENTION: ${{ inputs.watch-mention }}
@@ -116,9 +121,7 @@ runs:
         $env.PR_NUMBER_INPUT = $pr
         $env.COMMENT_BODY_INPUT = $commentBody
 
-        # --- 余额检查（仅对官方 DeepSeek API 生效） ---
-        let base_url = $env.BASE_URL_INPUT
-        if ($base_url | str starts-with 'https://api.deepseek.com') {
+        if ($env.BASE_URL_INPUT | str starts-with 'https://api.deepseek.com') {
           let token = $env.CHAT_TOKEN_INPUT
           if ($token | is-empty) {
             print 'Error: CHAT_TOKEN_INPUT is required for balance check.'
@@ -139,7 +142,6 @@ runs:
           }
           print 'Balance check passed.'
         }
-        # --- 余额检查结束 ---
 
         # Let the child Nu parser receive the runtime container-side action path before `use`.
         ^nu -I ($env.GITHUB_ACTION_PATH | path join nu) -c "
