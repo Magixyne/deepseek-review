@@ -207,12 +207,12 @@ export def --env deepseek-review [
     let response = try {
       http get -H CHAT_HEADER 'https://api.deepseek.com/user/balance'
     } catch {
-      print 'Error fetching deepseek balance'
+      print '(ansi r)Error fetching deepseek balance(ansi reset)'
       exit $ECODE.SERVER_ERROR
     }
     let is_available = $response | get is_available? | default false
     if not $is_available {
-      print 'Error: DeepSeek API balance is not available.'
+      print $'(ansi r)DeepSeek API balance is not available. ($response)(ansi reset)'
       exit $ECODE.CONDITION_NOT_SATISFIED
     }
   }
