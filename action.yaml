@@ -68,7 +68,6 @@ runs:
       uses: hustcer/setup-nu@v3.27
       with:
         version: 0.115.1
-        
     - name: DeepSeek Code Review
       shell: nu {0}
       env:
