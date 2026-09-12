@@ -205,7 +205,7 @@ export def --env deepseek-review [
   let parsed_url = try { $url | url parse } catch { null }
   if ($parsed_url | is-not-empty) and ($parsed_url.host? | default '') == 'api.deepseek.com' {
     let response = try {
-      http get -H CHAT_HEADER 'https://api.deepseek.com/user/balance'
+      http get -H $CHAT_HEADER 'https://api.deepseek.com/user/balance'
     } catch {
       print '(ansi r)Error fetching deepseek balance(ansi reset)'
       exit $ECODE.SERVER_ERROR
